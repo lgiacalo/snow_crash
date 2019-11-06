@@ -1,0 +1,6 @@
+Le home contient un script Lua appartenant à flag11 et avec le suid.
+
+À l'ouverture du script, nous comprenons que celui-ci ouvre un socket en local sur le port 5151 et attend une connexion sur celui-ci.
+Un fois la connexion établie, il demande un mot de passe. La hash sha1 de ce dernier est comparé avec celui qui est dans le fichier. Si les deux hash correspondent, le message "Gz you dumb*" est envoyé au client.
+
+Nous allons tester de chiffrer le hash contenu dans le fichier en le comparant avec des dictionnaires de hash disponibles en lignes. Le site [md5hashing.net](https://md5hashing.net/hash/sha1/f05d1d066fb246efe0c6f7d095f909a7a0cf34a0) nous donne comme résultat `NotSoEasy`.
