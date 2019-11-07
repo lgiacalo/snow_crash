@@ -1,8 +1,9 @@
-# level 12
-Le home contient un script Perl ("level12.pl") appartenant à flag12 et avec le suid.
+# Level12
+Le home contient un script Perl `level12.pl` appartenant à `flag12` et avec le suid.
 
-Le user flag12 possede aussi les fichiers suivant : find / -user flag12 2> /dev/null
-```
+Le user `flag12` possede aussi les fichiers suivant :
+```sh
+$> find / -user flag12 2> /dev/null
 /var/www/level12
 /var/www/level12/level12.pl
 /rofs/var/www/level12

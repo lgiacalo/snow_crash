@@ -1,4 +1,4 @@
-# level 13
+# Level13
 ## Methode 1
 Le home contient un binaire ("level13") appartenant à flag13 et avec le suid.
 Au lancement du binaire, nous obtenons un message d'erreur :

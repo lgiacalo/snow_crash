@@ -1,9 +1,9 @@
-# level 10
-Le home contient un binaire level10 qui appartient à l'user flag10 et avec un setuid activé.
-Il y a également un fichier token qui appartient à l'utilisateur flag10 et qui ne peut être lu que par lui.
-Nous devons donc exploiter le binaire level10 pour qu'il nous révèle le contenu de token.
+# Level10
+Le home contient un binaire `level10` qui appartient à l'user `flag10` et avec un setuid activé.
+Il y a également un fichier token qui appartient à l'utilisateur `flag10` et qui ne peut être lu que par lui.
+Nous devons donc exploiter le binaire `level10` pour qu'il nous révèle le contenu de token.
 
-À l'execution de level10, un usage apparait : 
+À l'execution de `level10`, un usage apparait : 
 ```sh
 $> ./level10
 ./level10 file host
@@ -30,6 +30,6 @@ Nous utilisons donc la commande `nc` dans un VM pour écouter sur ce port :
 $> nc -l -p 6969
 ```
 
-puis nous relançons le script de level10 pour avec l'adresse ip de la VM.
+Puis nous relançons le script de `level10` pour avec l'adresse ip de la VM.
 
-Le flag obtenu sur dans la console nc de la VM est woupa2yuojeeaaed06riuj63c
+Le flag obtenu sur dans la console nc de la VM est `woupa2yuojeeaaed06riuj63c`.

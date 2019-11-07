@@ -1,6 +1,6 @@
-# level 13
+# Level14
 Ni le home et ni le système ne contient de fichier appartenant aux utilisateurs level14 et flag14.
-
+## Méthode 1
 Nous copions donc getflag sur notre VM via scp puis nous ajoutons un nouvel utilisateur sur la machine avec l'uid 3014 (uid de flag14 trouvé dans `/etc/passwd`) :
 ```sh
 $> scp -P 4242 level14@<ip>:/bin/getflag .
@@ -15,7 +15,7 @@ $> ./getflag
 Check flag.Here is your token : 7QiHafiNa3HVozsaXkawuYrTstxbpABHD8CPnHJ
 ```
 
-Autre solution: 
+## Méthode 2 
 Ouvrir le binaire getflag avec gdb et suivre les instructions. Il faut eviter quelques conditions, c'est a dire modifier des variable pour passer les conditions qui font sortir du programme et qui empeche d'arriver a la fonction getuid(). Ensuite on modifie le resultat de getuid en mettant 3014 (voir /etc/passwd: flag14). Et le resultat s'affiche :)
 
-voir capture d'ecran
+![Voir capture d'ecran](gdb_getflag_level14.png)

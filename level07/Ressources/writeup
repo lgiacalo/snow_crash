@@ -1,10 +1,14 @@
+# Level07
 Le home contient en binaire level07 detenu par l'user flag07 et le suid activé.
-L'exécution de celui-ci renvoi apparemment sur la sortie standart notre identifiant.
+L'exécution de celui-ci renvoi apparemment sur la sortie standard notre identifiant.
 
-Nous désassemblons donc se binaire avec radare2.
-La fonction main fait un getenv("LOGNAME) puis concate /bin/echo au retour de getenv, ce qui donne par exmple "/bin/echo hello".
+Nous désassemblons donc se binaire avec `radare2`.
+La fonction main fait un getenv("LOGNAME) puis concate /bin/echo au retour de getenv, ce qui donne par exemple "/bin/echo hello".
 Cette string est ensuite donnée à la fonction system qui va l'interpréter.
 
 Nous pouvons donc injecter une commande dans LOGNAME qui sera interprété par le shell et renvoyé sur la sortie standart avec echo.
 Ce qui donne la commande suivante pour retrouver le flag :
+```sh
 $> LOGNAME='`getflag`' ./level07
+Check flag.Here is your token : fiumuikeil55xe9cu4dood66h
+```

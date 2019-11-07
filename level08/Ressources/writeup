@@ -1,10 +1,17 @@
+# Level08
 Il y a un fichier binaire level08 dans le home et qui appartient à l'user flag08 avec le suid.
 Au desassemblage du code binaire, il apparait que le programme prend en argument un fichier à lire.
-Si ce fichier contient le nom token, alors un message d'erreur apparait et le programme quitte.
+Si ce fichier contient la string `token`, alors un message d'erreur apparait et le programme quitte.
 Sinon, le programme lit le fichier et l'affiche sur la sortie standard.
 
 Il y a également un fichier token dans le home, mais qui appartient à l'utilisateur flag08 et qui ne peut pas être lu par les autres.
 
-Comme le programme ne peut pas ouvrir les fichiers contenant le mot token, nous créons alors un lien symbolique du fichier token vers /tmp/file : ln -s /home/user/level08/token /tmp/file
-Puis nous exécutons le programme : $> ./level08 /tmp/file
-Le flag pour se connecter au compte flag08 est affiché : quif5eloekouj29ke0vouxean
+Comme le programme ne peut pas ouvrir les fichiers contenant le mot token, nous créons alors un lien symbolique du fichier token vers /tmp/file :
+```sh
+$> ln -s /home/user/level08/token /tmp/file
+```
+Puis nous exécutons le programme :
+```sh
+$> ./level08 /tmp/file
+quif5eloekouj29ke0vouxean
+```

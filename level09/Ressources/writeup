@@ -1,13 +1,18 @@
-Il y a un fichier binaire level09 dans le home et qui appartient à l'user flag09 avec le suid.
+# Level09
+Il y a un fichier binaire `level09` dans le home et qui appartient à l'user `flag09` avec le suid.
 Au desassemblage du code binaire, il apparait que le programme prend en argument une string.
 Il affiche chaque caractère de la string sur la sortie standard après avoir effectué une opération.
-Cette opération consiste à ajouter la valeur d'un compteur (commençant par 0) à la valeur ascii du caractère. Le compteur est incrémenté à chaque tour.
+Cette opération consiste à ajouter la valeur de la position du caractère (en commençant par 0) à la valeur ascii du caractère.
+Par exemple, `aaaa => abcd`.
 
 Le dossier home contient également un fichier token qui peut être lu directement.
 A la lecture du fichier, il apparait que les caractères ne sont pas tous lisibles.
-La lecture des bytes du fichiers avec `hexdump -C token` montre en effet du bytes supérieurs à 127.
+La lecture des bytes du fichiers avec `hexdump -C token` montre en effet des bytes supérieurs à 127.
 
 On pense donc que ce fichier est le résultat du binaire level09 ayant pour entré le véritable token.
-On effectue donc l'opération inverse pour récupérer le vrai token.
+On effectue donc l'opération inverse pour récupérer le vrai token :
+```sh
+echo $((0x7c-7)) + $((0x3d-8)) + $((0x82-9)) + $((0x7f-10)) + $((0x70-11)) + $((0x82-12)) + $((0x6e-13)) + $((0x83-14)) + $((0x82-15)) + $((0x44-16)) + $((0x42-17)) + $((0x83-18)) + $((0x44-19)) + $((0x75-20)) + $((0x7b-21)) + $((0x7f-22)) + $((0x8c-23)) + $((0x89-24))
+```
 
-Le flag pour se connecter au compte flag09 est : f3iji1ju5yuevaus41q1afiuq
+Le flag pour se connecter au compte flag09 est : `f3iji1ju5yuevaus41q1afiuq`
