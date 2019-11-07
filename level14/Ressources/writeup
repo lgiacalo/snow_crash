@@ -14,3 +14,8 @@ $> su test
 $> ./getflag
 Check flag.Here is your token : 7QiHafiNa3HVozsaXkawuYrTstxbpABHD8CPnHJ
 ```
+
+Autre solution: 
+Ouvrir le binaire getflag avec gdb et suivre les instructions. Il faut eviter quelques conditions, c'est a dire modifier des variable pour passer les conditions qui font sortir du programme et qui empeche d'arriver a la fonction getuid(). Ensuite on modifie le resultat de getuid en mettant 3014 (voir /etc/passwd: flag14). Et le resultat s'affiche :)
+
+voir capture d'ecran
