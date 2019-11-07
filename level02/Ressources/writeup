@@ -1,0 +1,30 @@
+# Level02
+Le dossier home contient un fichier pcap qui est un sniffing d'une communication réseau.
+Je l'ai ouvert avec wireshark sur kali. Ce dernier permet de visualiser toute la conversation TCP. Il en résulte :
+```
+..%..%..&..... ..#..'..$..&..... ..#..'..$.. .....#.....'........... .38400,38400....#.SodaCan:0....'..DISPLAY.SodaCan:0......xterm.........."........!........"..".....b........b....	B.
+..............................1.......!.."......"......!..........."........"..".............	..
+.....................
+Linux 2.6.38-8-generic-pae (::ffff:10.1.1.2) (pts/10)
+
+..wwwbugs login: l.le.ev.ve.el.lX.X
+..
+Password: ft_wandr...NDRel.L0L
+.
+..
+Login incorrect
+wwwbugs login: 
+```
+Si on examine le mot de passe ft_wandr...NDRel.L0L dans wireshark, les `.` ont pour valeur 7f qui est un delete ce qui efface le caractère précédent.
+Le mot de passe est donc `ft_waNDReL0L`.
+
+## Methode en ligne de commande
+### Read *.pcap
+```sh
+$> tshark -r level02.pcap -V
+$> tcpdump -ttttnnr level02.pcap
+```
+```sh
+$> tcpick -C -yP -r level02.pcap
+$> tcpick -C -yU -r level02.pcap #!!! il supprime !!
+```

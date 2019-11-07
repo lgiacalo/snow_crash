@@ -1,0 +1,13 @@
+Il y a un fichier binaire level09 dans le home et qui appartient à l'user flag09 avec le suid.
+Au desassemblage du code binaire, il apparait que le programme prend en argument une string.
+Il affiche chaque caractère de la string sur la sortie standard après avoir effectué une opération.
+Cette opération consiste à ajouter la valeur d'un compteur (commençant par 0) à la valeur ascii du caractère. Le compteur est incrémenté à chaque tour.
+
+Le dossier home contient également un fichier token qui peut être lu directement.
+A la lecture du fichier, il apparait que les caractères ne sont pas tous lisibles.
+La lecture des bytes du fichiers avec `hexdump -C token` montre en effet du bytes supérieurs à 127.
+
+On pense donc que ce fichier est le résultat du binaire level09 ayant pour entré le véritable token.
+On effectue donc l'opération inverse pour récupérer le vrai token.
+
+Le flag pour se connecter au compte flag09 est : f3iji1ju5yuevaus41q1afiuq

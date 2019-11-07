@@ -1,0 +1,20 @@
+# Level05
+Un fichier nommé level05 est présent dans /var/mail et appartient à root.
+En l'ouvrant, la syntaxe est celle d'un fichier crontab. Il exécute le programme /usr/sbin/openarenaserver en tant qu'user flag05.
+Le programme openarenaserver est un script shell qui exécute les programmes se trouvant dans /opt/openarenaserver.
+Ce dernier dossier appartient à root mais getfacl montre que ses attributs ACL donnent les droits 777 à l'user level05, ce qui nous permet de créer des scripts dans ce dossier et qui seront exécutés par /usr/sbin/openarenaserver.
+
+Nous créons donc le script suivant :
+```sh
+$> cat > /opt/openarenaserver/getflag <<EOF
+#!/bin/sh
+getflag > /tmp/flag
+exit 0
+EOF
+```
+
+Nous ajoutons à notre crontab l'instruction d'exécuter toutes les secondes le script appartenant à root dans /var/mail/level05 :
+$> crontab -e
+* * * * * /var/mail/level05
+
+Nous attendons 1 minute et nous pouvons récupérer le flag dans /tmp/flag.

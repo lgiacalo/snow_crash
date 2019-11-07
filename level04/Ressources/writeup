@@ -1,0 +1,12 @@
+# Level04
+Le home contient le script Perl level04.pl qui possède un suid de l'user flag04.
+Mais le système ne prend pas en compte les suid d'un script pour des raisons de sécurité ("Due to the increased likelihood of security flaws, many operating systems ignore the setuid attribute when applied to executable shell scripts.", wikipedia).
+Ce même script est présent dans le dossier level04 du serveur web (/var/www) en fonctionnement sur le port 4747 d'après les fichiers de configuration d'apache (/etc/apache2/sites-enabled/level05.conf), avec également un setuid.
+On va donc utiliser le server web pour réaliser une attaque sur le scipt.
+
+Celui-ci prend l'argument 'x' donné au script et affiche sa valeur à travers la commande print `echo $y 2>&1`;
+Avec `curl`, nous donnons la valeur x=`getflag`, le programme getflag est interprété par le script perl car entre backquotes.
+```sh
+curl 'localhost:4747/?x=`getflag`'
+```
+Nous obtenons le flag : `earoevaevoem4ov4ar8ap`

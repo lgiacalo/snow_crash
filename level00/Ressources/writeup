@@ -1,0 +1,8 @@
+# Level00
+J'ai cherché les fichiers possédés par level00 ou flag00 sur le système :
+```sh
+$> find / -user flag00 2> /dev/null
+/usr/sbin/john
+```
+Ce fichier contient le texte `cdiiddwpgswtgt` qui est du code chiffré par caesar Cipher.
+Le message décodé est `nottohardhere` qui est le mdp de flag00.

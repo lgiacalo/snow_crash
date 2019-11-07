@@ -1,0 +1,58 @@
+# Level03
+Il y a un binaire dans le home qui a un setuid et un setgid activé, permettant de l'exécuter avec les droits de son propriétaire.
+De plus, le binaire appartient à l'utilisateur flag03, ce que l'on souhaite pour pouvoir exécuter getflag.
+En le lançant, il apparait que l'on ne peut pas modifier son comportement avec ses arguments.
+Nous le désassemblons avec `r2` (radare2), ce qui permet de découvrir le code assembleur de la fonction main :
+```
+| ; DATA XREF from entry0 (0x8048407)                                                         
+| 0x080484a4 55             push ebp; /home/user/level03/level03.c:8                          
+| 0x080484a5 89e5           mov ebp, esp; /types.h:676                                        
+| 0x080484a7 83e4f0         and esp, 0xfffffff0                                               
+| 0x080484aa 83ec20         sub esp, 0x20                                                     
+| 0x080484ad e8eefeffff     call sym.imp.getegid; /home/user/level03/level03.c:11;[gf]        
+| 0x080484b2 89442418       mov dword [local_18h], eax                                        
+| ; uid_t geteuid(void)                                                                       
+| 0x080484b6 e8d5feffff     call sym.imp.geteuid; /home/user/level03/level03.c:12;[gg]        
+| 0x080484bb 8944241c       mov dword [local_1ch], eax                                        
+| ; [0x18:4]=-1                                                                               
+| ; 24                                                                                        
+| 0x080484bf 8b442418       mov eax, dword [local_18h]; /home/user/level03/level03.c:14       
+| 0x080484c3 89442408       mov dword [local_8h], eax                                         
+| ; [0x18:4]=-1                                                                               
+| ; 24                                                                                        
+| 0x080484c7 8b442418       mov eax, dword [local_18h]                                        
+| 0x080484cb 89442404       mov dword [local_4h], eax                                         
+| ; [0x18:4]=-1                                                                               
+| ; 24                                                                                        
+| 0x080484cf 8b442418       mov eax, dword [local_18h]                                        
+| 0x080484d3 890424         mov dword [esp], eax                                              
+| 0x080484d6 e805ffffff     call sym.imp.setresgid;[gh]                                       
+| ; [0x1c:4]=-1                                                                               
+| ; 28                                                                                        
+| 0x080484db 8b44241c       mov eax, dword [local_1ch]; /home/user/level03/level03.c:15       
+| 0x080484df 89442408       mov dword [local_8h], eax                                         
+| ; [0x1c:4]=-1                                                                               
+| ; 28                                                                                        
+| 0x080484e3 8b44241c       mov eax, dword [local_1ch]                                        
+| 0x080484e7 89442404       mov dword [local_4h], eax                                         
+| ; [0x1c:4]=-1                                                                               
+| ; 28                                                                                        
+| 0x080484eb 8b44241c       mov eax, dword [local_1ch]                                        
+| 0x080484ef 890424         mov dword [esp], eax                                              
+| 0x080484f2 e889feffff     call sym.imp.setresuid;[gi]                                       
+| ; const char *string                                                                        
+| ; [0x80485e0:4]=0x7273752f                                                                  
+| ; "/usr/bin/env echo Exploit me"                                                            
+| 0x080484f7 c70424e08504.  mov dword [esp], str.usr_bin_env_echo_Exploit_me; /home/user/level
+| ; int system(const char *string)                                                            
+| 0x080484fe e8adfeffff     call sym.imp.system;[gj]                                          
+| 0x08048503 c9             leave; /home/user/level03/level03.c:18                            
+| 0x08048504 c3             ret 
+```
+La fonction `main` uilise l'effective uid et gid et non le real uid/gid pour son fonctionnement, puis lance une commande shell avec la fonction system.
+La commande est "/usr/bin/env echo Exploit me". /usr/bin/env permet de trouver le PATH correct de la commande echo dans le système.
+Si l'on modifie le PATH avant l'exécution du programme, nous pourrons alors exécuter notre echo à la place du vrai.
+
+Nous créons donc un lien symbolique de echo vers /bin/getflag avec ln -s /bin/getflag /tmp/echo.
+Le lien est placé dans /tmp car nous n'avons pas les droits d'écriture dans le dossier personel.
+Puis nous modifions le PATH en lançant level03: PATH=/tmp:$PATH ./level03 ce qui nous donne le flag.

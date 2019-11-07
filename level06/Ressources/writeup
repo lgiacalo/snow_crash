@@ -1,0 +1,15 @@
+Dans le home, nous trouvons deux fichiers :
+- level06 qui est un fichier exécutable (d'après la commande file) et qui appartient à l'user flag06 avec le setuid.
+  Lors de son exécution, il semble exécuter le script php level06.php du même répertoire et lui donner des arguments de la ligne de commande.
+  Ceci est confirmé avec le désassemblage de la fonction main : la commande suivante est appelée : /usr/bin/php /home/user/level06/level06.php.
+
+- level06.php qui est un script php qui prend 2 arguments en entrée, puis fait des remplacements du contenu du fichier donné par le 1er argument, avec la commande preg_replace.
+  Cette commande est vulnérable à une injection de commande si elle est utilisée avec le modifieur /e (ce qui permet d'interpréter le résultat de la substitution comme du code php), ce qui est le cas ici.
+
+On comprend alors que l'on doit injecter une commande dans le level06.php à travers le fichier donné en argument, pour que le code injecté appelle la commande getflag avec l'uid de flag06 (grâce au suid).
+
+Le manuel php de preg_replace renseigne sur les modificateurs, dont le /e (adresse https://www.php.net/manual/en/reference.pcre.pattern.modifiers.php). Il est clairement indiqué sur la page comment réaliser l'injection.
+Dans notre cas, nous créons un fichier de la sorte :
+$> echo '[x ${`getflag`}]' > /tmp/inject
+Puis nous lançons le binaire level06 pour récupérer le flag :
+$> ./level06 /tmp/inject
