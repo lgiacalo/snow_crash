@@ -1,4 +1,5 @@
 # level 13
+## Methode 1
 Le home contient un binaire ("level13") appartenant à flag13 et avec le suid.
 Au lancement du binaire, nous obtenons un message d'erreur :
 ```sh
@@ -18,5 +19,31 @@ Il suffit maintenant de se connecter à cet utilisateur puis de lancer le binair
 ```sh
 $> su test13
 $> ./level13
+your token is 2A31L79asukciNyi8uppkEuSx
+```
+
+## Methode 2
+Le uid attendu est 4242 et `nm -u` montre que `level13` fait appel à la fonction getuid.
+Nous allons créer un bibliothèque dynamique avec la fonction getuid qui retournera toujours `4242`, puis nous allons l'injecter à `level13` pour quelle soit utilisée à la place de la vraie fonction.
+Pour ce faire, nous devons copier `level13` pour qu'il n'ait plus son suid, car ce dernier désactive l'injection de bibliothèque :
+```sh
+$> cp level13 /tmp/level13
+```
+
+Voici le code de la fonction qui sera enregistré dans /tmp/getuid.c :
+```c
+#include <unistd.h>
+#include <sys/types.h>
+
+uid_t getuid(void)
+{
+	return (4242);
+}
+```
+
+Après la compilation, il suffit d'appeler `level13` avec l'injection :
+```sh
+$> gcc -shared -fPIC /tmp/getuid.c -o /tmp/getuid.so
+$> LD_PRELOAD=/tmp/getuid.so ./level13
 your token is 2A31L79asukciNyi8uppkEuSx
 ```

@@ -1,0 +1,16 @@
+# level 13
+Ni le home et ni le système ne contient de fichier appartenant aux utilisateurs level14 et flag14.
+
+Nous copions donc getflag sur notre VM via scp puis nous ajoutons un nouvel utilisateur sur la machine avec l'uid 3014 (uid de flag14 trouvé dans `/etc/passwd`) :
+```sh
+$> scp -P 4242 level14@<ip>:/bin/getflag .
+$> useradd -u 3014 test
+```
+
+Il suffit maintenant de se connecter à cet utilisateur puis de lancer le binaire :
+
+```sh
+$> su test
+$> ./getflag
+Check flag.Here is your token : 7QiHafiNa3HVozsaXkawuYrTstxbpABHD8CPnHJ
+```
